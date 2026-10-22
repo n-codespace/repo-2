@@ -1,9 +1,9 @@
 version: '3.8'
 
 services:
-  web-app:
+  flask-app:
     build: .
-    container_name: nodejs_containerized_app
+    container_name: flask_containerized_app
     ports:
       - "5000:5000"
     restart: unless-stopped

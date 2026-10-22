@@ -1,24 +1,28 @@
 # ==============================================================================
-# Dockerfile: Node.js / JavaScript Web Application Containerization
+# Dockerfile: Python / Flask Application Containerization
 # ==============================================================================
 
-# 1. Base Image: Use official lightweight Node.js Alpine runtime
-FROM node:20-alpine
+# 1. Base Image: Use official lightweight Python runtime
+FROM python:3.9-slim
 
 # 2. Set working directory inside container
 WORKDIR /app
 
-# 3. Copy package configuration first for Docker layer caching
-COPY package.json ./
+# 3. Environment settings for clean Python logs
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
-# 4. Install production dependencies
-RUN npm install --omit=dev
+# 4. Copy requirements file first for layer caching
+COPY requirements.txt .
 
-# 5. Copy application source code into the container
+# 5. Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# 6. Copy application code into container
 COPY . .
 
-# 6. Expose the port on which the web app listens
+# 7. Expose Flask default port 5000
 EXPOSE 5000
 
-# 7. Start the JavaScript application
-CMD ["node", "app.js"]
+# 8. Start Flask web server
+CMD ["python", "app.py"]

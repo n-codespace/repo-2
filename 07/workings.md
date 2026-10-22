@@ -1,12 +1,15 @@
-# Assignment 07: Write a Dockerfile to Containerize a JavaScript/Node.js App
+# Assignment 07: Write a Dockerfile to Containerize a Python/Flask App
 
 ## How to Run This Application
 
-### 1. From Terminal via Node.js Directly
+### 1. From Terminal via Python Directly
 Open terminal in `07/`:
 ```bash
-# Run web server directly
-node app.js
+# 1. Install dependencies
+pip install -r requirements.txt
+
+# 2. Run Flask server
+python app.py
 ```
 Open browser at: **`http://localhost:5000`**
 
@@ -16,10 +19,10 @@ Open browser at: **`http://localhost:5000`**
 Make sure Docker Desktop is running, then open terminal in `07/`:
 ```bash
 # 1. Build the Docker image from Dockerfile
-docker build -t nodejs-docker-app:v1 .
+docker build -t flask-docker-app:v1 .
 
 # 2. Run the container in background, mapping host port 5000
-docker run -d --name node-live -p 5000:5000 nodejs-docker-app:v1
+docker run -d --name flask-live -p 5000:5000 flask-docker-app:v1
 
 # 3. Check status
 docker ps
@@ -29,13 +32,13 @@ curl http://localhost:5000/
 curl http://localhost:5000/health
 
 # 5. View logs
-docker logs node-live
+docker logs flask-live
 
 # 6. Stop and remove container
-docker stop node-live
-docker rm node-live
+docker stop flask-live
+docker rm flask-live
 ```
-*(On Windows, you can also run `.\run_docker.bat`)*
+*(On Windows, you can also double-click `run_docker.bat`)*
 
 ---
 
@@ -54,6 +57,6 @@ docker compose down
 ---
 
 ### 4. Running in Jenkins CI
-1. Create a **Pipeline** job named `NodeJS-Docker-Build`.
+1. Create a **Pipeline** job named `Flask-Docker-Build`.
 2. Paste the script from `07/Jenkinsfile`.
 3. Click **Build Now** to watch Jenkins build the image and test the live container endpoint automatically.
