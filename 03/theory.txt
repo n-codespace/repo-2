@@ -1,0 +1,76 @@
+================================================================================
+ASSIGNMENT 03: UPLOAD A PYTHON PROJECT USING JENKINS
+================================================================================
+
+1. AIM / OBJECTIVE:
+To upload and automate the execution and testing of a Python application inside a Jenkins Continuous Integration (CI) environment using a Jenkins Freestyle Project integrated with Git.
+
+2. PREREQUISITES:
+- Jenkins Server installed and running (default: http://localhost:8080).
+- Git installed on both the local machine and the Jenkins host.
+- Jenkins Git Plugin installed.
+- Python 3.x installed and available in the system PATH.
+
+3. ARCHITECTURE & WORKFLOW:
+  [Local Developer]
+         │
+         │ (git push origin main)
+         ▼
+  [GitHub / Git Repository]
+         │
+         │ (SCM Checkout / Polling)
+         ▼
+  [Jenkins Freestyle Job]
+         ├── 1. Pull latest code from Git
+         ├── 2. Run Python Application (app.py)
+         └── 3. Execute Unit Tests (unittest test_app.py)
+         │
+         ▼
+  [Build Status: SUCCESS (Blue) / FAILURE (Red)]
+
+4. STEP-BY-STEP CONFIGURATION IN JENKINS:
+
+Step 1: Push Python Code to Git Repository
+  git init
+  git add app.py test_app.py requirements.txt
+  git commit -m "Add Python Project for Jenkins Build"
+  git remote add origin https://github.com/<your-username>/python-jenkins-demo.git
+  git push -u origin main
+
+Step 2: Create a New Job in Jenkins
+  1. Open Jenkins Dashboard (http://localhost:8080).
+  2. Click on "New Item".
+  3. Enter name: "Python-Project-Build".
+  4. Select "Freestyle project" and click "OK".
+
+Step 3: Source Code Management (SCM)
+  1. Under the "Source Code Management" tab, select "Git".
+  2. In "Repository URL", enter your Git repo URL (e.g., https://github.com/<username>/python-jenkins-demo.git).
+  3. Under "Branch Specifier", enter: */main (or */master).
+
+Step 4: Build Triggers (Optional)
+  - Select "Poll SCM" and enter schedule: H/5 * * * * (checks for changes every 5 minutes) OR trigger manually.
+
+Step 5: Add Build Step
+  1. Scroll down to "Build Steps" and click "Add build step".
+  2. On Windows: Select "Execute Windows batch command".
+     On Linux: Select "Execute shell".
+  3. Enter the following commands:
+     python --version
+     python app.py
+     python -m unittest test_app.py -v
+
+Step 6: Save and Build
+  1. Click "Apply" and then "Save".
+  2. Click "Build Now" on the left menu.
+  3. Click on the build number (e.g., #1) -> click "Console Output".
+
+5. VERIFICATION:
+The Console Output will display:
+- Successful cloning of the Git repository.
+- Output from `app.py` showing student performance calculations.
+- Execution of all unit tests ending with: "Ran 5 tests ... OK".
+- Final line: "Finished: SUCCESS" with a blue ball icon.
+
+6. CONCLUSION:
+Integrating a Python project with Jenkins automates code retrieval from Git, environment verification, and regression testing without manual human intervention.

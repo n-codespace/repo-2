@@ -1,0 +1,53 @@
+================================================================================
+ASSIGNMENT 07: CONTAINERIZE A JAVASCRIPT/NODE.JS APPLICATION AND BUILD THE IMAGE
+================================================================================
+
+1. AIM / OBJECTIVE:
+To containerize a JavaScript / Node.js web application using a Dockerfile, build a custom Docker image, run it as an isolated container, and test HTTP endpoints.
+
+2. WHAT IS A DOCKERFILE?
+A Dockerfile is a plain text file containing a sequence of instructions used by the Docker daemon to assemble a container image automatically.
+
+3. LINE-BY-LINE DOCKERFILE DIRECTIVES EXPLAINED:
+- `FROM node:20-alpine`:
+  Specifies the parent base image. Using `alpine` provides an ultra-lightweight Linux distribution with Node.js pre-installed (~50MB instead of 1GB).
+- `WORKDIR /app`:
+  Sets the active working directory inside the container for subsequent commands (`COPY`, `RUN`, `CMD`).
+- `COPY package.json ./`:
+  Copies only the package configuration first. If application code changes later, Docker reuses the cached layer of installed node packages.
+- `RUN npm install --omit=dev`:
+  Executes the package installer inside the image during the build process, omitting non-production devDependencies.
+- `COPY . .`:
+  Copies the rest of the source code (`app.js`, etc.) into `/app`.
+- `EXPOSE 5000`:
+  Documents the network port the container listens on at runtime.
+- `CMD ["node", "app.js"]`:
+  Provides defaults for an executing container. Starts the Node.js application process when the container launches.
+
+4. STEP-BY-STEP BUILD & RUN PROCEDURE:
+Step 1: Build the Docker Image:
+        docker build -t nodejs-docker-app:v1 .
+        (-t tags the image with a name and version; the trailing dot indicates the current directory).
+
+Step 2: Verify the Built Image:
+        docker images
+        (Confirm that 'nodejs-docker-app' appears in the list).
+
+Step 3: Run the Container:
+        docker run -d --name node-live-container -p 5000:5000 nodejs-docker-app:v1
+        (-d runs in background; -p 5000:5000 maps host port 5000 to container port 5000).
+
+Step 4: Access and Test:
+        Open web browser: http://localhost:5000/
+        Or use curl: curl http://localhost:5000/health
+        Response: {"hostname": "...", "status": "healthy", ...}
+
+Step 5: View Logs:
+        docker logs -f node-live-container
+
+Step 6: Stop & Cleanup:
+        docker stop node-live-container
+        docker rm node-live-container
+
+5. CONCLUSION:
+Containerizing the JavaScript/Node.js application ensures environment parity: the application runs identically on local developer laptops, staging servers, and production cloud infrastructure without worrying about local Node.js versions.

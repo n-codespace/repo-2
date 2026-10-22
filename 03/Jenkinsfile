@@ -1,0 +1,57 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                echo 'Checking out Python project...'
+                checkout scm
+            }
+        }
+
+        stage('Environment Info') {
+            steps {
+                script {
+                    if (isUnix()) {
+                        sh 'python3 --version || python --version'
+                    } else {
+                        bat 'python --version'
+                    }
+                }
+            }
+        }
+
+        stage('Run Application') {
+            steps {
+                script {
+                    if (isUnix()) {
+                        sh 'python3 app.py || python app.py'
+                    } else {
+                        bat 'python app.py'
+                    }
+                }
+            }
+        }
+
+        stage('Execute Unit Tests') {
+            steps {
+                script {
+                    if (isUnix()) {
+                        sh 'python3 -m unittest test_app.py -v || python -m unittest test_app.py -v'
+                    } else {
+                        bat 'python -m unittest test_app.py -v'
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'SUCCESS: Python Project built and passed all tests in Jenkins!'
+        }
+        failure {
+            echo 'FAILURE: Python tests or build failed.'
+        }
+    }
+}

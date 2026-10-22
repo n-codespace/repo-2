@@ -1,0 +1,43 @@
+================================================================================
+ASSIGNMENT 05: BUILD A PIPELINE ON JENKINS AND BUILD A JAVASCRIPT PROJECT
+================================================================================
+
+1. AIM / OBJECTIVE:
+To create a Jenkins Declarative Pipeline via a version-controlled Jenkinsfile to automatically pull JavaScript / Node.js code, verify runtime environment, run automated unit tests, and execute the project.
+
+2. WHAT IS A JENKINS DECLARATIVE PIPELINE?
+A Declarative Pipeline provides a modern, structured, and opinionated syntax for defining CI/CD pipelines as code.
+Key Keywords:
+- `pipeline`: The root block enclosing the entire pipeline definition.
+- `agent any`: Instructs Jenkins to run the pipeline on any available executor.
+- `stages`: Contains a sequence of one or more stage directives.
+- `stage('Name')`: Represents a distinct phase in the CI lifecycle (e.g., Checkout, Test, Build).
+- `steps`: Contains one or more executable commands (`sh` for Linux/macOS, `bat` for Windows).
+- `post`: Executes conditional clean-up or notification steps (always, success, failure).
+
+3. PIPELINE WORKFLOW PHASES:
+┌─────────────────┐    ┌─────────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+│ Stage 1:        │ ──►│ Stage 2:            │ ──►│ Stage 3:         │ ──►│ Stage 4:        │
+│ Checkout SCM    │    │ Environment Check   │    │ Unit Testing     │    │ Build & Run     │
+└─────────────────┘    └─────────────────────┘    └──────────────────┘    └─────────────────┘
+                                                                                   │
+                                                                                   ▼
+                                                                     [post: SUCCESS / FAILURE]
+
+4. STEP-BY-STEP CONFIGURATION IN JENKINS:
+Step 1: Open Jenkins Dashboard -> Click "New Item".
+Step 2: Enter Name: "JS-Declarative-Pipeline", choose "Pipeline", and click OK.
+Step 3: Scroll to the "Pipeline" section:
+        Option A (Direct Script): Select "Pipeline script" and paste the Jenkinsfile contents directly.
+        Option B (SCM): Select "Pipeline script from SCM", choose "Git", paste your repository URL, and enter Script Path as "05/Jenkinsfile".
+Step 4: Click Save.
+Step 5: Click "Build Now".
+Step 6: View the "Stage View" on the dashboard showing green boxes for each completed stage (Checkout, Environment Check, Unit Testing, Build & Run).
+
+5. ADVANTAGES OVER FREESTYLE JOBS:
+- Pipeline as Code: Jenkinsfile is stored directly in Git with the code, versioned, and peer-reviewed.
+- Visual Stage View: Instant identification of which specific step passed or failed.
+- Resilience: Can survive Jenkins master restarts and supports complex branch workflows.
+
+6. CONCLUSION:
+The Jenkins Declarative Pipeline successfully built, tested, and ran the JavaScript/Node.js project. It provides transparency, reproducibility, and robust continuous integration.

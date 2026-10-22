@@ -1,0 +1,45 @@
+================================================================================
+ASSIGNMENT 10: DOCKER COMPOSE: MULTICONTAINER WEB APPLICATION (NODE.JS & REDIS)
+================================================================================
+
+1. AIM / OBJECTIVE:
+To orchestrate and manage a multi-container web application consisting of a Node.js / JavaScript web frontend and a Redis in-memory database using Docker Compose.
+
+2. WHAT IS DOCKER COMPOSE?
+Docker Compose is an orchestration tool used to define, configure, and execute multi-container Docker applications. Instead of running numerous complex `docker run`, `docker network create`, and `docker volume create` commands manually, Compose uses a declarative YAML configuration file (`docker-compose.yml`) to spin up the entire application stack with a single command.
+
+3. ARCHITECTURE & NETWORKING:
+                   ┌──────────────────────────────────────────────┐
+                   │             Custom Bridge Network            │
+                   │                                              │
+ [Host Port 5000] ──► [ Service: 'web' ] ──► (DNS: 'redis:6379') ──► [ Service: 'redis' ]
+                   │     (Node.js App)                            │     (Redis Cache)
+                   └──────────────────────────────────────────────┘
+                                                                           │
+                                                                           ▼
+                                                                  [ Volume: redis_data ]
+
+How DNS Service Discovery works:
+Docker Compose automatically creates an isolated internal network for all services in the file. Each service can directly resolve and communicate with any other service using its service name (e.g., `redis`) as the hostname.
+
+4. BREAKDOWN OF KEY DIRECTIVES IN `docker-compose.yml`:
+- `version: '3.8'`: Compose file format specification.
+- `services`: Defines the containers to create and manage:
+  * `web`: Built locally from the `Dockerfile` using Node.js, maps port 5000 to host.
+  * `redis`: Uses the official Alpine image from Docker Hub.
+- `environment`: Injects environment variables (`REDIS_HOST=redis`, `REDIS_PORT=6379`) into the container.
+- `depends_on`: Ensures `redis` container starts before the `web` container.
+- `volumes`: Defines persistent storage for Redis data (`redis_data:/data`).
+- `networks`: Isolates communication within the custom bridge network.
+
+5. ESSENTIAL DOCKER COMPOSE COMMANDS:
+- `docker compose up -d`: Builds, (re)creates, and starts all containers in detached mode.
+- `docker compose ps`: Displays the status, health, and port mappings of all services.
+- `docker compose logs -f`: Displays aggregated live streaming logs from all services.
+- `docker compose exec web sh`: Opens a terminal session inside the web container.
+- `docker compose stop`: Stops running containers without removing them.
+- `docker compose down`: Stops and removes all containers, networks, and internal resources.
+- `docker compose down -v`: Also cleans up associated persistent volumes.
+
+6. CONCLUSION:
+Docker Compose simplifies multi-tier microservice architecture by standardizing development environments, eliminating networking configuration errors, and enabling single-command deployment.

@@ -1,0 +1,56 @@
+================================================================================
+ASSIGNMENT 08: COLLEGE EVENT APPLICATION (WITH / WITHOUT DOCKER VOLUME) [JAVASCRIPT]
+================================================================================
+
+1. AIM / OBJECTIVE:
+To demonstrate data persistence in containerized applications using Docker Volumes vs. default Ephemeral Storage through a Node.js / JavaScript College Event Management Application.
+
+2. EPHEMERAL STORAGE VS PERSISTENT VOLUMES:
+- Default (Without Volume):
+  Docker containers use a copy-on-write storage driver. Any data created or modified inside the container is stored in a temporary "writable container layer". When the container is deleted (`docker rm`), this writable layer is destroyed along with all its data.
+- Docker Volumes (With Volume):
+  Volumes are completely managed by Docker and stored on the host filesystem (e.g., `/var/lib/docker/volumes/`). They bypass the Union File System and their lifecycle is independent of the container. Deleting the container has NO impact on the volume data.
+
+3. ARCHITECTURAL COMPARISON:
+
+Without Volume:
+[ Node.js Container 1: writes event data ] ──► [ Container Deleted ] ──► [ DATA LOST PERMANENTLY ]
+
+With Volume:
+[ Node.js Container 1 ] ──(writes)──► [ Docker Volume: 'event_storage_js' ] (on Host)
+      │                                             ▲
+[ Container Deleted ]                               │
+      │                                             │
+[ New Node.js Container 2 ] ──(mounts & reads)──────┘  ──► [ DATA PERSISTS 100% ]
+
+4. EXPERIMENTAL STEP-BY-STEP VERIFICATION:
+
+Case 1: Without Docker Volume
+  1. Start container and add event:
+     docker run --name c1 college-event-app-js add "TechFest 2026" "2026-11-15" "Auditorium"
+  2. Remove container c1:
+     docker rm c1
+  3. Start new container c2:
+     docker run --name c2 college-event-app-js list
+  -> Result: "No events found in storage!". Data was lost upon container removal.
+
+Case 2: With Docker Volume
+  1. Create volume:
+     docker volume create event_storage_js
+  2. Start container cA mounted to volume:
+     docker run --name cA -v event_storage_js:/app/data college-event-app-js add "Hackathon 2026" "2026-12-01" "Lab 3"
+  3. Delete container cA:
+     docker rm cA
+  4. Start brand new container cB mounted to the SAME volume:
+     docker run --name cB -v event_storage_js:/app/data college-event-app-js list
+  -> Result: "Event: Hackathon 2026 | Date: 2026-12-01 | Venue: Lab 3" is displayed!
+
+5. KEY DOCKER VOLUME COMMANDS:
+- `docker volume create <name>` : Creates a persistent volume.
+- `docker volume ls`            : Lists all existing volumes.
+- `docker volume inspect <name>`: Shows mountpoint on host.
+- `docker run -v <vol>:<path>`  : Mounts volume into container.
+- `docker volume rm <name>`     : Deletes a volume.
+
+6. CONCLUSION:
+Docker volumes are essential for stateful applications (databases, file uploads, event registries) where business data must outlive container lifecycle operations.

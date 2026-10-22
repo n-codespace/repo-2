@@ -1,0 +1,12 @@
+{
+  "name": "docker-containerized-webapp-js",
+  "version": "1.0.0",
+  "description": "Containerized Node.js Web Application",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "keywords": ["docker", "dockerfile", "javascript", "nodejs"],
+  "author": "MCA Student",
+  "license": "MIT"
+}

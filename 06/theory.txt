@@ -1,0 +1,42 @@
+================================================================================
+ASSIGNMENT 06: BUILD A REAL CI PIPELINE USING JENKINS SCRIPTED PIPELINE (JAVASCRIPT)
+================================================================================
+
+1. AIM / OBJECTIVE:
+To construct a complete, production-grade Continuous Integration (CI) pipeline using Jenkins Scripted Pipeline (Groovy DSL) for a JavaScript / Node.js application, implementing automated checkout, dependency validation, automated unit testing, artifact archiving, and robust exception handling.
+
+2. WHAT IS A SCRIPTED PIPELINE?
+A Scripted Pipeline is the traditional, programmatic pipeline execution model in Jenkins. It is written in Groovy and runs on the Jenkins master node or executor using a `node {}` block.
+
+Key Characteristics:
+- Imperative: Code executes line-by-line using standard Groovy language features.
+- Full Programming Power: Supports loops (`for`, `while`), conditional logic (`if/else`), custom methods, and `try-catch-finally` blocks.
+- Ideal for Complex CI/CD: Necessary when complex build logic or external system integrations cannot fit into declarative blocks.
+
+3. COMPARISON: DECLARATIVE VS SCRIPTED PIPELINE:
+┌───────────────────────────┬─────────────────────────────┬─────────────────────────────┐
+│ Feature                   │ Declarative Pipeline        │ Scripted Pipeline           │
+├───────────────────────────┼─────────────────────────────┼─────────────────────────────┤
+│ Root Syntax               │ pipeline { ... }            │ node { ... }                │
+│ Paradigm                  │ Declarative (strict schema) │ Imperative (Groovy code)    │
+│ Flexibility               │ Moderate (best practices)   │ Very High (full Groovy)     │
+│ Error Handling            │ post { failure { ... } }    │ try { ... } catch { ... }   │
+│ Learning Curve            │ Very easy & beginner-safe   │ Requires Groovy knowledge   │
+└───────────────────────────┴─────────────────────────────┴─────────────────────────────┘
+
+4. STAGES OF A REAL CONTINUOUS INTEGRATION (CI) PIPELINE:
+1. Code Checkout: Pulls the newest commit on the target branch from GitHub.
+2. Prepare Environment: Sets up Node.js runtime versions and package dependencies.
+3. Automated Testing: Runs regression test suites using Node.js built-in test runner (`node --test`).
+4. Execute Application: Runs core business logic (e.g. invoice calculations) to verify runtime stability.
+5. Packaging & Archival: Packages build outputs (`release-app-js.tar.gz`) and archives them via `archiveArtifacts`.
+6. Notification & Status: Reports build success or failure status back to developers.
+
+5. HOW TO RUN IN JENKINS:
+1. Create a "New Item" -> Enter "JS-Scripted-CI-Pipeline" -> Choose "Pipeline".
+2. In the Pipeline script box, paste the Groovy script from `06/Jenkinsfile`.
+3. Click "Save" and click "Build Now".
+4. Monitor the build logs in "Console Output" to inspect each stage and artifact creation.
+
+6. CONCLUSION:
+The Jenkins Scripted Pipeline gives developers granular control over the CI lifecycle with custom error handling, ensuring that broken JavaScript code is flagged immediately before reaching production.

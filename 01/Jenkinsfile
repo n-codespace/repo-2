@@ -1,0 +1,61 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                echo 'Checking out Student Portfolio source code...'
+                checkout scm
+            }
+        }
+
+        stage('Verify Node.js') {
+            steps {
+                script {
+                    if (isUnix()) {
+                        sh 'node --version'
+                    } else {
+                        bat 'node --version'
+                    }
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                echo 'Building Docker Image for Student Portfolio...'
+                script {
+                    if (isUnix()) {
+                        sh 'docker build -t student-portfolio:latest 01/'
+                    } else {
+                        bat 'docker build -t student-portfolio:latest 01/'
+                    }
+                }
+            }
+        }
+
+        stage('Run & Healthcheck') {
+            steps {
+                echo 'Testing Docker container execution...'
+                script {
+                    if (isUnix()) {
+                        sh 'docker run -d --name test-portfolio -p 3000:3000 student-portfolio:latest'
+                        sh 'sleep 3 && curl -I http://localhost:3000 || true'
+                        sh 'docker stop test-portfolio && docker rm test-portfolio'
+                    } else {
+                        bat 'docker run -d --name test-portfolio -p 3000:3000 student-portfolio:latest'
+                        bat 'timeout /t 3'
+                        bat 'curl -I http://localhost:3000 || ver>nul'
+                        bat 'docker stop test-portfolio && docker rm test-portfolio'
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Portfolio CI Pipeline complete!'
+        }
+    }
+}

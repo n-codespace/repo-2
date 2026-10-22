@@ -1,0 +1,13 @@
+{
+  "name": "student-attendance-js",
+  "version": "1.0.0",
+  "description": "Student Attendance Management System in JavaScript",
+  "main": "attendance.js",
+  "scripts": {
+    "start": "node attendance.js",
+    "test": "node --test test_attendance.js"
+  },
+  "keywords": ["attendance", "devops", "javascript", "nodejs"],
+  "author": "MCA Student",
+  "license": "MIT"
+}

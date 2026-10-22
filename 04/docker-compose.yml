@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  attendance-app:
+    build: .
+    container_name: student_attendance_app_js
+    volumes:
+      - attendance_data:/app
+    command: node attendance.js
+
+volumes:
+  attendance_data:

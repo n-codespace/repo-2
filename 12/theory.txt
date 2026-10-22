@@ -1,0 +1,67 @@
+================================================================================
+ASSIGNMENT 12: DEPLOYING APPLICATION THROUGH KUBERNETES TO AZURE CLOUD (AKS)
+================================================================================
+
+1. AIM / OBJECTIVE:
+To deploy and expose a containerized application to the public internet using Azure Kubernetes Service (AKS) and an Azure Cloud Load Balancer.
+
+2. WHAT IS AZURE KUBERNETES SERVICE (AKS)?
+AKS is a managed container orchestration service provided by Microsoft Azure.
+Key Advantages:
+- Free Control Plane: Microsoft manages the Kubernetes master nodes, API server, and etcd database with zero management fee.
+- Integrated Cloud Networking: Native integration with Azure Virtual Networks and Azure Load Balancers.
+- Enterprise Security: Integrated with Microsoft Entra ID (Azure Active Directory) for role-based access control (RBAC).
+
+3. ARCHITECTURE ON AZURE CLOUD:
+                                                                 ┌────────────────────────┐
+                                                                 │ Azure Kubernetes (AKS) │
+                                                                 │                        │
+  [Public Internet] ──► [ Azure Load Balancer ] ──► (Port 80) ──►│   ├── Pod 1 (Nginx)    │
+                              (Public IPv4)                      │   └── Pod 2 (Nginx)    │
+                                                                 └────────────────────────┘
+
+4. MANIFESTS BREAKDOWN:
+
+A. Deployment Manifest (`app-deployment.yaml`):
+- Runs 2 replicas of the containerized application.
+- Pulls certified images from Microsoft Container Registry (`mcr.microsoft.com`).
+- Sets resource requests and limits to guarantee predictable performance.
+
+B. Service Manifest (`app-service.yaml`):
+- `type: LoadBalancer`:
+  When Kubernetes sees `type: LoadBalancer` running inside AKS, the Azure Cloud Controller automatically talks to Azure networking APIs to provision an Azure Standard Load Balancer and assign a real, publicly routable static IPv4 address.
+
+5. STEP-BY-STEP DEPLOYMENT PROCEDURE:
+
+Step 1: Authenticate with Azure:
+        az login
+
+Step 2: Create a Resource Group:
+        az group create --name rg-mca-k8s --location eastus
+
+Step 3: Provision the AKS Cluster:
+        az aks create --resource-group rg-mca-k8s --name mca-aks-cluster --node-count 1 --generate-ssh-keys
+        (Note: Node count is set to 1 for student lab cost efficiency).
+
+Step 4: Fetch Cluster Credentials:
+        az aks get-credentials --resource-group rg-mca-k8s --name mca-aks-cluster
+        (This merges AKS connection certificates into ~/.kube/config).
+
+Step 5: Apply Kubernetes Manifests:
+        kubectl apply -f app-deployment.yaml
+        kubectl apply -f app-service.yaml
+
+Step 6: Retrieve External Public IP:
+        kubectl get service azure-app-service --watch
+        (Initial state will show `<pending>`. After ~60 seconds, Azure assigns the external public IP, e.g., `20.198.85.120`).
+
+Step 7: Test in Browser:
+        Open: http://<EXTERNAL-IP>
+        The application is live and accessible globally over the internet.
+
+Step 8: Resource Clean Up (Important for Cost Prevention):
+        az group delete --name rg-mca-k8s --yes --no-wait
+        (Deletes all cluster VMs, disks, and public IPs to prevent cloud credit consumption).
+
+6. CONCLUSION:
+Deploying via AKS provides automated enterprise-level Kubernetes management, auto-scaling, and cloud load balancing with minimal operational complexity.

@@ -1,0 +1,71 @@
+// ==============================================================================
+// Jenkins Scripted Pipeline (Groovy DSL) - JavaScript / Node.js
+// Real CI Pipeline with Checkout, Node validation, Testing, and Packaging
+// ==============================================================================
+
+node {
+    def buildSuccess = false
+
+    try {
+        stage('1. Code Checkout') {
+            echo '[CI] Step 1: Checking out latest commits from repository...'
+            checkout scm
+        }
+
+        stage('2. Prepare Environment') {
+            echo '[CI] Step 2: Validating Node.js runtime and packages...'
+            if (isUnix()) {
+                sh 'node --version'
+                sh 'npm --version'
+            } else {
+                bat 'node --version'
+                bat 'npm --version'
+            }
+        }
+
+        stage('3. Automated Testing') {
+            echo '[CI] Step 3: Executing JavaScript unit tests...'
+            if (isUnix()) {
+                sh 'node --test 06/test_app.js || node --test test_app.js'
+            } else {
+                bat 'node --test 06/test_app.js || node --test test_app.js'
+            }
+        }
+
+        stage('4. Execute Application') {
+            echo '[CI] Step 4: Running e-commerce invoice calculation...'
+            if (isUnix()) {
+                sh 'node 06/app.js || node app.js'
+            } else {
+                bat 'node 06/app.js || node app.js'
+            }
+        }
+
+        stage('5. Package & Artifact') {
+            echo '[CI] Step 5: Packaging release distribution...'
+            if (isUnix()) {
+                sh 'tar -czf release-app-js.tar.gz 06/app.js 06/package.json || tar -czf release-app-js.tar.gz app.js package.json'
+            } else {
+                bat 'tar -czf release-app-js.tar.gz app.js package.json || copy app.js release-app-js.js'
+            }
+            archiveArtifacts artifacts: '*release*.*', allowEmptyArchive: true
+        }
+
+        buildSuccess = true
+
+    } catch (Exception err) {
+        echo "[ERROR] CI Pipeline failed with exception: ${err}"
+        currentBuild.result = 'FAILURE'
+        throw err
+
+    } finally {
+        stage('6. Notification & Cleanup') {
+            if (buildSuccess) {
+                echo '>>> SUCCESS: Real CI Pipeline build passed all quality and test gates! <<<'
+            } else {
+                echo '>>> FAILURE: Build aborted due to errors. Alerting engineering team. <<<'
+            }
+            echo '[CLEANUP] Cleaning temporary workspace artifacts...'
+        }
+    }
+}

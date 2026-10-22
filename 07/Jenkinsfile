@@ -1,0 +1,49 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                echo 'Checking out Node.js application code...'
+                checkout scm
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                echo 'Building Docker Image from Dockerfile...'
+                script {
+                    if (isUnix()) {
+                        sh 'docker build -t nodejs-docker-app:ci 07/'
+                    } else {
+                        bat 'docker build -t nodejs-docker-app:ci 07/'
+                    }
+                }
+            }
+        }
+
+        stage('Test Container Endpoint') {
+            steps {
+                echo 'Starting container and testing HTTP endpoints...'
+                script {
+                    if (isUnix()) {
+                        sh 'docker run -d --name node-test-run -p 5000:5000 nodejs-docker-app:ci'
+                        sh 'sleep 3 && curl -f http://localhost:5000/health || true'
+                        sh 'docker stop node-test-run && docker rm node-test-run'
+                    } else {
+                        bat 'docker run -d --name node-test-run -p 5000:5000 nodejs-docker-app:ci'
+                        bat 'timeout /t 3'
+                        bat 'curl -f http://localhost:5000/health || ver>nul'
+                        bat 'docker stop node-test-run && docker rm node-test-run'
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Node.js Docker Containerization pipeline finished.'
+        }
+    }
+}

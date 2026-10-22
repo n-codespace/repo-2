@@ -1,0 +1,57 @@
+================================================================================
+ASSIGNMENT 11: DEPLOY NGINX USING DOCKER AND KUBERNETES
+================================================================================
+
+1. AIM / OBJECTIVE:
+To deploy the Nginx web server first as a standalone container using Docker, and subsequently transition to enterprise container orchestration by deploying, scaling, and exposing Nginx using Kubernetes (K8s) Deployments and Services.
+
+2. WHAT IS NGINX?
+Nginx is an open-source, high-performance HTTP web server, reverse proxy, load balancer, and caching engine widely utilized to serve web content and manage incoming network traffic.
+
+3. PART 1: DEPLOYING NGINX VIA DOCKER:
+- Command:
+  docker run -d --name nginx-standalone -p 8080:80 nginx:alpine
+- How it works:
+  Docker pulls the lightweight Alpine Linux Nginx image, instantiates the container in detached background mode (`-d`), and routes host port 8080 to container port 80 (`-p 8080:80`).
+- Access:
+  Visiting `http://localhost:8080` serves the Nginx welcome page.
+
+4. PART 2: MOVING FROM DOCKER TO KUBERNETES:
+While Docker runs containers on a single host, Kubernetes manages containerized applications across a cluster of nodes, providing:
+- Self-Healing: Automatically restarts failed containers and reschedules them if a node dies.
+- Horizontal Scaling: Adjusts replica count dynamically with simple commands.
+- Zero-Downtime Rolling Updates: Gradually rolls out new versions without interrupting users.
+- Service Discovery & Load Balancing: Evenly distributes traffic across healthy pods.
+
+5. UNDERSTANDING KUBERNETES MANIFESTS:
+
+A. Deployment (`nginx-deployment.yaml`):
+- `replicas: 2`: Ensures two identical Pods run concurrently.
+- `selector` & `labels`: Identifies which Pods belong to this deployment using key-value tags (`app: nginx-web`).
+- `containers`: Specifies the `nginx:alpine` image and container port 80.
+- `resources`: Defines minimum guaranteed compute (`requests`) and maximum ceiling (`limits`).
+- `livenessProbe`: Actively pings the container endpoint to guarantee healthy state.
+
+B. Service (`nginx-service.yaml`):
+- `type: NodePort`: Exposes the service on each Node's IP at a static port (`30080`).
+- `selector`: Routes incoming client traffic to all Pods labeled `app: nginx-web`.
+- `port: 80` & `targetPort: 80`: Maps service port to container port.
+
+6. STEP-BY-STEP KUBERNETES DEPLOYMENT COMMANDS:
+Step 1: Apply Deployment:
+        kubectl apply -f nginx-deployment.yaml
+Step 2: Apply Service:
+        kubectl apply -f nginx-service.yaml
+Step 3: Verify Pods:
+        kubectl get pods -l app=nginx-web
+        (Observe two running pods: `nginx-deployment-xxxxx-yyyyy`).
+Step 4: Verify Service:
+        kubectl get svc nginx-service
+Step 5: Scale Pods on demand:
+        kubectl scale deployment nginx-deployment --replicas=4
+Step 6: Test connectivity:
+        kubectl port-forward svc/nginx-service 8080:80
+        (Open http://localhost:8080 in browser).
+
+7. CONCLUSION:
+Deploying Nginx via Docker is fast for local experimentation, while Kubernetes is the industry-standard orchestrator for high availability, self-healing, and automated scaling in production.

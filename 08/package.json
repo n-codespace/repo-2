@@ -1,0 +1,12 @@
+{
+  "name": "college-event-app-js",
+  "version": "1.0.0",
+  "description": "College Event Application demonstrating Docker volume persistence in Node.js",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "keywords": ["docker", "volume", "persistence", "javascript", "nodejs"],
+  "author": "MCA Student",
+  "license": "MIT"
+}

@@ -1,0 +1,8 @@
+version: '3.8'
+
+services:
+  azure-web-app:
+    build: .
+    container_name: local_azure_webapp_preview
+    ports:
+      - "8080:80"

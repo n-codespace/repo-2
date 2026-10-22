@@ -1,0 +1,12 @@
+{
+  "name": "student-skill-portfolio",
+  "version": "1.0.0",
+  "description": "Student Skill Portfolio Website developed in JavaScript and Node.js",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": ["portfolio", "javascript", "nodejs", "student"],
+  "author": "MCA Student",
+  "license": "MIT"
+}

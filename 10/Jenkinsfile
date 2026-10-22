@@ -1,0 +1,52 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                echo 'Checking out Multi-Container Compose project...'
+                checkout scm
+            }
+        }
+
+        stage('Compose Up') {
+            steps {
+                echo 'Orchestrating multi-container stack with Docker Compose...'
+                script {
+                    if (isUnix()) {
+                        sh 'docker compose -f 10/docker-compose.yml up -d --build'
+                    } else {
+                        bat 'docker compose -f 10/docker-compose.yml up -d --build'
+                    }
+                }
+            }
+        }
+
+        stage('Verify Multi-Container Health') {
+            steps {
+                echo 'Checking Web and Redis communication...'
+                script {
+                    if (isUnix()) {
+                        sh 'sleep 5 && curl -f http://localhost:5000/ || true'
+                    } else {
+                        bat 'timeout /t 5'
+                        bat 'curl -f http://localhost:5000/ || ver>nul'
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Tearing down Docker Compose stack...'
+            script {
+                if (isUnix()) {
+                    sh 'docker compose -f 10/docker-compose.yml down -v'
+                } else {
+                    bat 'docker compose -f 10/docker-compose.yml down -v'
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,50 @@
+================================================================================
+PROJECT DEVELOPMENT REPORT: STUDENT SKILL PORTFOLIO WEBSITE
+================================================================================
+
+1. AIM / OBJECTIVE:
+To design and develop a responsive, personal Student Skill Portfolio Website using JavaScript, HTML5, and CSS3, served through a lightweight Node.js web server. The website showcases student profile information, technical skills, academic projects, and contact mechanisms.
+
+2. TECHNOLOGY STACK USED:
+- Frontend: HTML5 (Semantic Structure), CSS3 (Flexbox/CSS Grid, Responsive Layout, Dark/Light Theme variables), Vanilla JavaScript (ES6+ for dynamic DOM rendering and interactive theme toggling).
+- Backend / Web Server: Node.js (Built-in HTTP and File System module for serving static assets without heavy third-party dependencies).
+- Version Control: Git & GitHub.
+
+3. ARCHITECTURE & FILE STRUCTURE:
+01/
+  ├── index.html     -> Main structure: Hero, Skills section, Projects section, Contact form.
+  ├── style.css      -> CSS styling, CSS variables for theming, responsive grid layouts.
+  ├── app.js         -> Dynamic rendering of skills and projects array, contact form validation, and dark mode toggle.
+  ├── server.js      -> Node.js HTTP server listening on port 3000 to serve static files.
+  ├── package.json   -> Project metadata and npm start script.
+  └── theory.txt     -> This project development report.
+
+4. KEY FEATURES:
+- Dynamic Content Rendering: Skills and projects are stored as JavaScript objects and dynamically injected into the DOM.
+- Dark / Light Mode: Interactive switch allowing instant theme toggle.
+- Responsive Design: Adapts smoothly on mobile, tablet, and desktop screens.
+- Contact Form: Captures inputs and confirms receipt without reloading the page.
+- Zero-Dependency Web Server: Runs directly using native Node.js HTTP module.
+
+5. HOW TO RUN THE PROJECT:
+Method 1 (Node.js):
+  1. Open terminal in the 01/ folder.
+  2. Run: node server.js  (or npm start)
+  3. Open your browser and visit: http://localhost:3000
+
+Method 2 (Direct Browser):
+  Double click 'index.html' to open directly in any web browser.
+
+6. GIT VERSION CONTROL WORKFLOW:
+  # Initialize git repository
+  git init
+  # Stage all files
+  git add .
+  # Commit changes with descriptive message
+  git commit -m "Initial commit: Student Skill Portfolio website in JavaScript"
+  # Push to GitHub
+  git remote add origin <repo-url>
+  git push -u origin main
+
+7. CONCLUSION & LEARNING OUTCOME:
+The Student Skill Portfolio was successfully built using pure JavaScript and Node.js. It demonstrates core front-end concepts (DOM manipulation, event handling, responsive CSS) and backend fundamentals (serving HTTP requests via Node.js).

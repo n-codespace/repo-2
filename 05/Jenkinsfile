@@ -1,0 +1,63 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                echo '=== Stage 1: Checking out source code from Git ==='
+                checkout scm
+            }
+        }
+
+        stage('Environment Check') {
+            steps {
+                echo '=== Stage 2: Checking Node.js Runtime ==='
+                script {
+                    if (isUnix()) {
+                        sh 'node --version'
+                    } else {
+                        bat 'node --version'
+                    }
+                }
+            }
+        }
+
+        stage('Unit Testing') {
+            steps {
+                echo '=== Stage 3: Running Automated JavaScript Unit Tests ==='
+                script {
+                    if (isUnix()) {
+                        sh 'node --test 05/test_calculator.js || node --test test_calculator.js'
+                    } else {
+                        bat 'node --test 05/test_calculator.js || node --test test_calculator.js'
+                    }
+                }
+            }
+        }
+
+        stage('Build & Run') {
+            steps {
+                echo '=== Stage 4: Executing JavaScript Application ==='
+                script {
+                    if (isUnix()) {
+                        sh 'node 05/calculator.js || node calculator.js'
+                    } else {
+                        bat 'node 05/calculator.js || node calculator.js'
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo '=== Pipeline Execution Finished ==='
+        }
+        success {
+            echo 'SUCCESS: All pipeline stages completed cleanly!'
+        }
+        failure {
+            echo 'FAILURE: One or more stages failed. Check console log.'
+        }
+    }
+}

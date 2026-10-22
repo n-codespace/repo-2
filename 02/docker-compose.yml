@@ -1,0 +1,7 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: container_management_demo
+    restart: unless-stopped

@@ -1,0 +1,2 @@
+# Minimal dependencies for Jenkins Python project
+pytest>=7.0.0

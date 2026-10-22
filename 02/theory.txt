@@ -1,0 +1,79 @@
+================================================================================
+ASSIGNMENT 02: DOCKER – CONTAINER MANAGEMENT
+================================================================================
+
+1. WHAT IS DOCKER & CONTAINER MANAGEMENT?
+Docker is an open-source platform that enables developers to automate the deployment, scaling, and management of applications inside lightweight, portable units called "Containers".
+
+A Container bundles application code along with all its libraries, configurations, and dependencies so it runs reliably across different computing environments (development, testing, production).
+
+2. CONTAINER VS VIRTUAL MACHINE (VM):
+- Virtual Machine: Runs a full Guest Operating System on top of a Hypervisor. Heavyweight, slow to boot (minutes), consumes high RAM and CPU.
+- Docker Container: Shares the host operating system's kernel. Extremely lightweight, boots in milliseconds, consumes minimal memory and system resources.
+
+3. CONTAINER LIFECYCLE:
+A Docker container transitions through several distinct states:
+1. Created: Container is configured but not yet started (`docker create`).
+2. Running: Process inside the container is actively executing (`docker run` / `docker start`).
+3. Paused: Container processes are suspended in memory (`docker pause`).
+4. Stopped / Exited: Container processes have halted (`docker stop`).
+5. Removed: Container and its writeable layer are deleted from disk (`docker rm`).
+
+4. ESSENTIAL DOCKER CONTAINER MANAGEMENT COMMANDS:
+
+A. Creating and Running Containers:
+- docker run -d --name my-web -p 8080:80 nginx
+  -> Pulls 'nginx' image (if not present), starts container in detached mode (-d), names it 'my-web', and maps host port 8080 to container port 80.
+- docker run -it ubuntu bash
+  -> Runs an interactive (-i) terminal session (-t) inside an Ubuntu container.
+
+B. Listing and Monitoring Containers:
+- docker ps
+  -> Lists all actively running containers.
+- docker ps -a
+  -> Lists ALL containers (both running and stopped).
+- docker stats
+  -> Displays live stream of container CPU, Memory, Network I/O usage.
+- docker top my-web
+  -> Displays running processes inside the specified container.
+
+C. Controlling Container State:
+- docker stop my-web
+  -> Gracefully terminates the container (sends SIGTERM, then SIGKILL).
+- docker start my-web
+  -> Starts an existing stopped container.
+- docker restart my-web
+  -> Restarts the container.
+- docker pause my-web / docker unpause my-web
+  -> Pauses / resumes execution without stopping.
+
+D. Inspecting and Debugging:
+- docker logs -f my-web
+  -> Follows real-time standard output and error logs of the container.
+- docker exec -it my-web /bin/sh
+  -> Opens an interactive shell inside an already running container.
+- docker inspect my-web
+  -> Returns low-level configuration and networking details in JSON format.
+
+E. Cleanup and Removal:
+- docker rm my-web
+  -> Deletes a stopped container.
+- docker rm -f my-web
+  -> Forces removal of a running container.
+- docker container prune -f
+  -> Cleans up all stopped containers in one command.
+
+5. PRACTICAL HANDS-ON WORKFLOW (SUMMARY):
+Step 1: Pull and start an Nginx web server:
+        docker run -d --name test-server -p 8080:80 nginx
+Step 2: Check status:
+        docker ps
+Step 3: Access via browser or curl:
+        curl http://localhost:8080
+Step 4: View logs:
+        docker logs test-server
+Step 5: Stop and delete:
+        docker stop test-server && docker rm test-server
+
+6. CONCLUSION:
+Docker container management provides total isolation, predictable execution, and effortless scale with minimal resource footprint compared to traditional virtual machines.

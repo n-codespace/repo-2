@@ -1,0 +1,48 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                echo 'Checking out Kubernetes Cloud Manifests...'
+                checkout scm
+            }
+        }
+
+        stage('Validate Manifests') {
+            steps {
+                echo 'Validating Kubernetes Deployment and Service YAML...'
+                script {
+                    if (isUnix()) {
+                        sh 'kubectl apply --dry-run=client -f 12/app-deployment.yaml'
+                        sh 'kubectl apply --dry-run=client -f 12/app-service.yaml'
+                    } else {
+                        bat 'kubectl apply --dry-run=client -f 12/app-deployment.yaml'
+                        bat 'kubectl apply --dry-run=client -f 12/app-service.yaml'
+                    }
+                }
+            }
+        }
+
+        stage('Deploy to Azure AKS') {
+            steps {
+                echo 'Applying deployment to AKS cluster...'
+                script {
+                    if (isUnix()) {
+                        sh 'kubectl apply -f 12/app-deployment.yaml'
+                        sh 'kubectl apply -f 12/app-service.yaml'
+                    } else {
+                        bat 'kubectl apply -f 12/app-deployment.yaml'
+                        bat 'kubectl apply -f 12/app-service.yaml'
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Azure AKS CD Pipeline finished.'
+        }
+    }
+}

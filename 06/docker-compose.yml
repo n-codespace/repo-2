@@ -1,0 +1,6 @@
+version: '3.8'
+
+services:
+  scripted-ci-runner:
+    build: .
+    container_name: scripted_ci_runner_js

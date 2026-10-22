@@ -1,0 +1,56 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                echo 'Pulling Attendance System (JavaScript) source code...'
+                checkout scm
+            }
+        }
+
+        stage('Verify Node.js') {
+            steps {
+                script {
+                    if (isUnix()) {
+                        sh 'node --version'
+                    } else {
+                        bat 'node --version'
+                    }
+                }
+            }
+        }
+
+        stage('Run Unit Tests') {
+            steps {
+                echo 'Running automated tests on JavaScript attendance logic...'
+                script {
+                    if (isUnix()) {
+                        sh 'node --test 04/test_attendance.js || node --test test_attendance.js'
+                    } else {
+                        bat 'node --test 04/test_attendance.js || node --test test_attendance.js'
+                    }
+                }
+            }
+        }
+
+        stage('Execute Attendance Application') {
+            steps {
+                echo 'Executing Student Attendance Report...'
+                script {
+                    if (isUnix()) {
+                        sh 'node 04/attendance.js || node attendance.js'
+                    } else {
+                        bat 'node 04/attendance.js || node attendance.js'
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Student Attendance Pipeline execution finished.'
+        }
+    }
+}

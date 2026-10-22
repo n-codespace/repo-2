@@ -1,0 +1,47 @@
+================================================================================
+ASSIGNMENT 04: STUDENT ATTENDANCE SYSTEM (JAVASCRIPT / NODE.JS)
+================================================================================
+
+1. AIM / OBJECTIVE:
+To design and develop a Student Attendance Management Application using JavaScript and Node.js that automates recording, calculating, and monitoring student attendance records, identifying attendance deficits (<75%), and version controlling the source code with Git.
+
+2. SYSTEM ARCHITECTURE & DATA DESIGN:
+- Data Structure: The system uses a JSON data store (`attendance_records.json`) containing:
+  1. `students`: Maps `rollNo` -> `{ name: "Student Name" }`
+  2. `records`: Maps `date` -> `{ rollNo: "Present" | "Absent" }`
+- Core Functions:
+  - `addStudent()`: Registers new student roll number and full name.
+  - `markAttendance()`: Records attendance status (Present / Absent) for a given date.
+  - `viewSummary()`: Aggregates total attended lectures vs total conducted lectures, computes percentage, and flags low attendance (<75%).
+  - `saveData()` / `loadData()`: Manages file I/O persistence via Node.js built-in `fs` module.
+
+3. HOW TO EXECUTE:
+Step 1: Open terminal in folder 04/
+Step 2: Run the script:
+        node attendance.js
+Step 3: Run unit tests:
+        node --test test_attendance.js
+Step 4: Output shows the attendance table, calculated percentages, and deficit warnings automatically.
+
+4. GIT VERSION CONTROL PRACTICE:
+To demonstrate version control practices for this application:
+  # Initialize Git repo
+  git init
+
+  # Commit 1: Initial core data structures
+  git add attendance.js package.json
+  git commit -m "feat: Add core student registration and attendance marking in JavaScript"
+
+  # Create a feature branch for percentage calculations
+  git checkout -b feature-summary-report
+  
+  # Make updates to summary function and commit
+  git add attendance.js
+  git commit -m "feat: Add attendance percentage calculator and 75% deficit alert"
+
+  # Merge feature into main branch
+  git checkout main
+  git merge feature-summary-report
+
+5. OUTCOME:
+The student attendance system provides a fast, computerized way to eliminate paper registers, reduce calculation errors, and maintain clean change logs using Git version control.

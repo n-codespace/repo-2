@@ -1,0 +1,15 @@
+{
+  "name": "docker-compose-multicontainer-js",
+  "version": "1.0.0",
+  "description": "Multi-container Node.js and Redis application orchestrated via Docker Compose",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "redis": "^4.6.10"
+  },
+  "keywords": ["docker-compose", "redis", "javascript", "nodejs", "multicontainer"],
+  "author": "MCA Student",
+  "license": "MIT"
+}

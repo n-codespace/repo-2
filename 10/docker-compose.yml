@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  # Web application service (Node.js / JavaScript)
+  web:
+    build: .
+    container_name: compose_web_app_js
+    ports:
+      - "5000:5000"
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - redis
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  # Redis in-memory key-value database service
+  redis:
+    image: redis:7-alpine
+    container_name: compose_redis_db
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  redis_data:
+    driver: local

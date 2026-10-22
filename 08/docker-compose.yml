@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  college-event-service:
+    build: .
+    container_name: college_event_app_js
+    volumes:
+      - event_storage:/app/data
+    command: ["list"]
+
+volumes:
+  event_storage:
+    name: event_persistent_volume_js
