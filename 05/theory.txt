@@ -1,9 +1,9 @@
 ================================================================================
-ASSIGNMENT 05: BUILD A PIPELINE ON JENKINS AND BUILD A JAVASCRIPT PROJECT
+ASSIGNMENT 05: BUILD A PIPELINE ON JENKINS AND BUILD A PYTHON PROJECT
 ================================================================================
 
 1. AIM / OBJECTIVE:
-To create a Jenkins Declarative Pipeline via a version-controlled Jenkinsfile to automatically pull JavaScript / Node.js code, verify runtime environment, run automated unit tests, and execute the project.
+To create a Jenkins Declarative Pipeline via a version-controlled Jenkinsfile to automatically pull Python code, verify Python runtime environment, run automated unit tests (`unittest`), and execute the project.
 
 2. WHAT IS A JENKINS DECLARATIVE PIPELINE?
 A Declarative Pipeline provides a modern, structured, and opinionated syntax for defining CI/CD pipelines as code.
@@ -26,7 +26,7 @@ Key Keywords:
 
 4. STEP-BY-STEP CONFIGURATION IN JENKINS:
 Step 1: Open Jenkins Dashboard -> Click "New Item".
-Step 2: Enter Name: "JS-Declarative-Pipeline", choose "Pipeline", and click OK.
+Step 2: Enter Name: "Python-Declarative-Pipeline", choose "Pipeline", and click OK.
 Step 3: Scroll to the "Pipeline" section:
         Option A (Direct Script): Select "Pipeline script" and paste the Jenkinsfile contents directly.
         Option B (SCM): Select "Pipeline script from SCM", choose "Git", paste your repository URL, and enter Script Path as "05/Jenkinsfile".
@@ -40,4 +40,4 @@ Step 6: View the "Stage View" on the dashboard showing green boxes for each comp
 - Resilience: Can survive Jenkins master restarts and supports complex branch workflows.
 
 6. CONCLUSION:
-The Jenkins Declarative Pipeline successfully built, tested, and ran the JavaScript/Node.js project. It provides transparency, reproducibility, and robust continuous integration.
+The Jenkins Declarative Pipeline successfully built, tested, and ran the Python project. It provides transparency, reproducibility, and robust continuous integration.

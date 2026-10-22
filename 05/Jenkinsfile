@@ -1,22 +1,26 @@
 pipeline {
     agent any
 
+    environment {
+        PYTHON_APP = 'calculator.py'
+    }
+
     stages {
         stage('Checkout') {
             steps {
-                echo '=== Stage 1: Checking out source code from Git ==='
+                echo '=== Stage 1: Checking out Python project from Git ==='
                 checkout scm
             }
         }
 
         stage('Environment Check') {
             steps {
-                echo '=== Stage 2: Checking Node.js Runtime ==='
+                echo '=== Stage 2: Validating Python Runtime ==='
                 script {
                     if (isUnix()) {
-                        sh 'node --version'
+                        sh 'python3 --version || python --version'
                     } else {
-                        bat 'node --version'
+                        bat 'python --version'
                     }
                 }
             }
@@ -24,12 +28,12 @@ pipeline {
 
         stage('Unit Testing') {
             steps {
-                echo '=== Stage 3: Running Automated JavaScript Unit Tests ==='
+                echo '=== Stage 3: Running Automated Python Unit Tests ==='
                 script {
                     if (isUnix()) {
-                        sh 'node --test 05/test_calculator.js || node --test test_calculator.js'
+                        sh 'python3 -m unittest 05/test_calculator.py -v || python -m unittest test_calculator.py -v'
                     } else {
-                        bat 'node --test 05/test_calculator.js || node --test test_calculator.js'
+                        bat 'python -m unittest 05/test_calculator.py -v || python -m unittest test_calculator.py -v'
                     }
                 }
             }
@@ -37,12 +41,12 @@ pipeline {
 
         stage('Build & Run') {
             steps {
-                echo '=== Stage 4: Executing JavaScript Application ==='
+                echo '=== Stage 4: Executing Python Application ==='
                 script {
                     if (isUnix()) {
-                        sh 'node 05/calculator.js || node calculator.js'
+                        sh 'python3 05/calculator.py || python calculator.py'
                     } else {
-                        bat 'node 05/calculator.js || node calculator.js'
+                        bat 'python 05/calculator.py || python calculator.py'
                     }
                 }
             }

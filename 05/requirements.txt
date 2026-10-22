@@ -1,0 +1,2 @@
+# Requirements for Python Jenkins Pipeline Project
+pytest>=7.0.0

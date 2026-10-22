@@ -3,4 +3,4 @@ version: '3.8'
 services:
   calculator-pipeline-runner:
     build: .
-    container_name: calculator_ci_runner_js
+    container_name: calculator_ci_runner_py
