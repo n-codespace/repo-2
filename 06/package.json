@@ -1,13 +1,13 @@
 {
-  "name": "jenkins-scripted-ci-js",
+  "name": "simple-scripted-ci-js",
   "version": "1.0.0",
-  "description": "Real CI Pipeline Application in JavaScript tested via Jenkins Scripted Pipeline",
+  "description": "Simple JavaScript app for Jenkins Scripted Pipeline",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
     "test": "node --test test_app.js"
   },
-  "keywords": ["ci", "jenkins", "scripted", "javascript", "nodejs"],
+  "keywords": ["jenkins", "scripted", "pipeline", "javascript"],
   "author": "MCA Student",
   "license": "MIT"
 }

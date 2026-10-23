@@ -1,12 +1,9 @@
-# Dockerfile for Real CI Scripted Pipeline Application (Node.js)
+# Lightweight Node.js container for simple CI testing
 FROM node:20-alpine
 
 WORKDIR /app
 
-COPY package.json ./
-RUN npm install --omit=dev
-
 COPY . .
 
-# Run unit tests followed by application invoice execution
+# Run tests and app
 CMD ["sh", "-c", "node --test test_app.js && node app.js"]
