@@ -1,0 +1,34 @@
+* Student Skill Portfolio Website Project Development Report
+
+
+* Docker-Container management
+
+
+* Upload a Python Project using Jenkins
+
+
+* Student Attendance
+
+
+* Build a pipeline on Jenkins and build a python project
+
+
+* Build a real CI pipeline using Jenkins scripted Pipeline
+
+
+* Write a Dockerfile to containerize a Python/Flask application and build the image.
+
+
+* College Event Application (With Without Docker volume)
+
+
+* Login to Azure Portal and Create a Web app
+
+
+* Docker Compose: Building and Orchestrating a MultiContainer Web Application
+
+
+* Deploy Nginx using Docker and Kubernetes
+
+
+* Deploying application through Kubernetes to Azure Cloud
